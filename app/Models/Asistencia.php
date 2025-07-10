@@ -21,4 +21,27 @@ class Asistencia extends Model
     {
         return "{$this->fecha} {$this->hora}";
     }
+
+    public function getNombrePersonaAttribute()
+    {
+        if ($this->tipo === 'ESTUDIANTE') {
+            $estudiante = \App\Models\Estudiante::where('uid_nfc', $this->uid_nfc)->first();
+
+            return $estudiante ? $estudiante->nombres.' '.$estudiante->apellido_paterno : 'Desconocido';
+        }
+
+        if ($this->tipo === 'DOCENTE') {
+            $docente = \App\Models\Docente::where('uid_nfc', $this->uid_nfc)->first();
+
+            return $docente ? $docente->nombres.' '.$docente->apellido_paterno : 'Desconocido';
+        }
+
+        if ($this->tipo === 'ADMINISTRATIVO') {
+            $admin = \App\Models\Administrativo::where('uid_nfc', $this->uid_nfc)->first();
+
+            return $admin ? $admin->nombres.' '.$admin->apellido_paterno : 'Desconocido';
+        }
+
+        return 'Desconocido';
+    }
 }
