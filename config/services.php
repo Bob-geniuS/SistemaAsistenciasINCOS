@@ -31,4 +31,6 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    //Define el token para API key
+    'api_secret' => env('API_SECRET'),
 ];
