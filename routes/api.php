@@ -4,7 +4,11 @@ use App\Http\Controllers\Api\NfcApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/registro-asistencia', [NfcApiController::class, 'registrar']);
+// ruta no protegida Route::post('/registro-asistencia', [NfcApiController::class, 'registrar']);
+// reemplazada por ruta corregida para API
+Route::middleware('verify.apikey')->group(function () {
+    Route::post('/registro-asistencia', [NfcApiController::class, 'registrar']);
+});
 
 /*
 |--------------------------------------------------------------------------
