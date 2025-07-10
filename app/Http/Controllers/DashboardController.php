@@ -10,15 +10,36 @@ class DashboardController extends Controller
     {
         $query = \App\Models\Asistencia::query();
 
-        if ($request->filled('fecha_inicio')) {
-            $query->where('fecha', '>=', $request->fecha_inicio);
-        }
+        if ($request->filled('rango')) {
+            switch ($request->rango) {
+                case 'hoy':
+                    $query->whereDate('fecha', \Carbon\Carbon::today());
+                    break;
 
-        if ($request->filled('fecha_fin')) {
-            $query->where('fecha', '<=', $request->fecha_fin);
+                case '7dias':
+                    $query->whereBetween('fecha', [
+                        \Carbon\Carbon::today()->subDays(6),
+                        \Carbon\Carbon::today(),
+                    ]);
+                    break;
+
+                case 'mes':
+                    $query->whereMonth('fecha', \Carbon\Carbon::today()->month)
+                        ->whereYear('fecha', \Carbon\Carbon::today()->year);
+                    break;
+            }
         } else {
-            // Si no envían fechas, mostrar solo hoy
-            $query->where('fecha', \Carbon\Carbon::today());
+            // Si no se envía rango, revisa si se enviaron fechas manuales
+            if ($request->filled('fecha_inicio')) {
+                $query->where('fecha', '>=', $request->fecha_inicio);
+            }
+
+            if ($request->filled('fecha_fin')) {
+                $query->where('fecha', '<=', $request->fecha_fin);
+            } else {
+                // Si no hay nada, mostrar solo hoy
+                $query->whereDate('fecha', \Carbon\Carbon::today());
+            }
         }
 
         $totalEstudiantes = (clone $query)->where('tipo', 'ESTUDIANTE')->count();
