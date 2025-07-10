@@ -1,16 +1,15 @@
 <?php
 
+use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DispositivosNfcController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\MateriaController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AsistenciaController;
-
-
 
 // Estudiantes
 Route::resource('estudiantes', EstudianteController::class);
@@ -33,9 +32,11 @@ Route::resource('horarios', HorarioController::class);
 // dispositivos
 Route::resource('dispositivos-nfcs', DispositivosNfcController::class);
 
-//asistencias
+// asistencias
 Route::resource('asistencias', AsistenciaController::class);
 
+// dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
