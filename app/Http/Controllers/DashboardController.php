@@ -2,25 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Asistencia;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $hoy = Carbon::today();
+        $query = \App\Models\Asistencia::query();
 
-        // Totales por tipo
-        $totalEstudiantes = Asistencia::where('tipo', 'ESTUDIANTE')->whereDate('fecha', $hoy)->count();
-        $totalDocentes = Asistencia::where('tipo', 'DOCENTE')->whereDate('fecha', $hoy)->count();
-        $totalAdministrativos = Asistencia::where('tipo', 'ADMINISTRATIVO')->whereDate('fecha', $hoy)->count();
+        if ($request->filled('fecha_inicio')) {
+            $query->where('fecha', '>=', $request->fecha_inicio);
+        }
 
-        // Total general
+        if ($request->filled('fecha_fin')) {
+            $query->where('fecha', '<=', $request->fecha_fin);
+        } else {
+            // Si no envían fechas, mostrar solo hoy
+            $query->where('fecha', \Carbon\Carbon::today());
+        }
+
+        $totalEstudiantes = (clone $query)->where('tipo', 'ESTUDIANTE')->count();
+        $totalDocentes = (clone $query)->where('tipo', 'DOCENTE')->count();
+        $totalAdministrativos = (clone $query)->where('tipo', 'ADMINISTRATIVO')->count();
+
         $totalHoy = $totalEstudiantes + $totalDocentes + $totalAdministrativos;
 
-        // Últimas asistencias
-        $ultimas = Asistencia::with('aula')
+        $ultimas = (clone $query)
+            ->with('aula')
             ->orderByDesc('fecha')
             ->orderByDesc('hora')
             ->limit(10)
