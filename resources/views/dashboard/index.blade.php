@@ -49,6 +49,28 @@
         </div>
     </form>
 </div>
+<div class="mb-3">
+    @if(request('rango'))
+    <div class="alert alert-info">
+        Mostrando datos de:
+        @switch(request('rango'))
+        @case('hoy')
+        Hoy
+        @break
+        @case('7dias')
+        Últimos 7 días
+        @break
+        @case('mes')
+        Este mes
+        @break
+        @endswitch
+    </div>
+    @endif
+
+    <a href="{{ route('dashboard', ['rango' => 'hoy']) }}" class="btn btn-primary">Hoy</a>
+    <a href="{{ route('dashboard', ['rango' => '7dias']) }}" class="btn btn-success">Últimos 7 días</a>
+    <a href="{{ route('dashboard', ['rango' => 'mes']) }}" class="btn btn-info">Este mes</a>
+</div>
 
 <div class="row mt-4">
     <div class="col-md-6">
