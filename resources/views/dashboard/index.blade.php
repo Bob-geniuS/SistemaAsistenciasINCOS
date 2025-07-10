@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+
 <div class="row">
 
     <div class="col-md-3">
@@ -28,6 +29,25 @@
             theme="danger" />
     </div>
 
+</div>
+<div>
+    <form method="GET" action="{{ route('dashboard') }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="date" name="fecha_inicio" value="{{ request('fecha_inicio') }}" class="form-control"
+                    placeholder="Desde">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="fecha_fin" value="{{ request('fecha_fin') }}" class="form-control"
+                    placeholder="Hasta">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" type="submit">
+                    Filtrar
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div class="row mt-4">
