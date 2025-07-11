@@ -20,4 +20,9 @@ class Docente extends Model
     {
         return $this->belongsToMany(Curso::class, 'docentes_cursos', 'docente_id', 'curso_id');
     }
+
+    public function materias()
+    {
+        return $this->belongsToMany(Materia::class, 'materia_docente');
+    }
 }
